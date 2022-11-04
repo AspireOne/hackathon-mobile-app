@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hackathon_app/screens/product_info_screen.dart';
 import 'package:hackathon_app/widgets/DrawerMenu.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -18,8 +19,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   void _scanShoes() async {
-    String barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-        "#ff6666", "Cancel", true, ScanMode.QR);
+    FlutterBarcodeScanner.scanBarcode("#ff6666", "Zrušit", true, ScanMode.QR)
+        .then((result) {
+          if (result == "-1") return;
+          Navigator.pushNamed(context, ProductInfoScreen.routeName, arguments: result);
+        });
   }
 
   @override

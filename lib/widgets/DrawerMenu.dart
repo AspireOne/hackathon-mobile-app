@@ -33,21 +33,15 @@ class _DrawerMenuState extends State<DrawerMenu> {
         inicials,
         style: const TextStyle(
           fontSize: 50.0,
-          color: Constants.primaryColor,
+          color: Colors.white,
         ),
       );
     }
 
-    if (inicials == null) {
-      return CircleAvatar(
-          backgroundColor: Colors.white,
-          radius: 40.0,
-          child: avatar
-      );
-    }
-    return Text(
-      inicials,
-      style: const TextStyle(fontSize: 40.0),
+    return CircleAvatar(
+        backgroundColor: Colors.deepPurple,
+        radius: 40.0,
+        child: avatar
     );
   }
 
@@ -76,13 +70,14 @@ class _DrawerMenuState extends State<DrawerMenu> {
   Widget build(BuildContext context) {
     // return a Drawer widget.
     return Drawer(
+      backgroundColor: Color.fromRGBO(240, 240, 240, 1),
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           // Create a drawer header with account information and background image.
           DrawerHeader(
             decoration: const BoxDecoration(
-              color: Constants.secondaryColor,
+              color: Color.fromRGBO(60, 60, 60, 1),
             ),
             child: Column(
               children: <Widget>[

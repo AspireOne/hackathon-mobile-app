@@ -41,6 +41,8 @@ dependencies:
   settings_ui: ^2.0.2
   http: ^0.13.5
   flutter_barcode_scanner: ^2.0.0
+  selectable_container: ^1.0.7
+  numberpicker: ^2.1.1
 
 dev_dependencies:
   flutter_test:

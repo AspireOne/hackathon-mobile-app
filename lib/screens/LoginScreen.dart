@@ -21,6 +21,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool register = true;
+  bool loading = false;
   String? error = null;
 
   String? email;
@@ -30,9 +31,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
+    loading = true;
     PrefsObject.getToken().then((token) {
-      print("TOKENAAAAAAAAAAA: $token");
-      if (token == null) return null;
+      if (token == null) {
+        setState(() => loading = false);
+        return;
+      }
       Api.loginWithToken(token).then((response) {
         handleLoginOrRegisterRequestResponse(response);
       });
@@ -43,6 +47,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (loading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -194,6 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildLoginButton() {
     return _buildSubmitButton("Přihlásit", () {
       if (email != null && password != null) {
+        setState(() => loading = true);
         Api.login(email!, password!)
             .then((response) => handleLoginOrRegisterRequestResponse(response));
       } else {
@@ -207,6 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildRegisterButton() {
     return _buildSubmitButton("Registrovat", () {
       if (name != null && surname != null && email != null && password != null) {
+        setState(() => loading = true);
         Api.register(email!, password!, name!, surname!)
             .then((response) => handleLoginOrRegisterRequestResponse(response));
       } else {
@@ -222,7 +235,9 @@ class _LoginScreenState extends State<LoginScreen> {
       style: ElevatedButton.styleFrom(
         minimumSize: const Size(120, 50),
       ),
-      onPressed: onPressed,
+      onPressed: () {
+        onPressed();
+      },
       child: Text(text),
     );
   }
@@ -232,11 +247,24 @@ class _LoginScreenState extends State<LoginScreen> {
     if (response.statusCode != 200 || response.data == null) {
       setState(() {
         error = response.message;
+        loading = false;
+        email = null;
+        password = null;
+        name = null;
+        surname = null;
       });
       return;
     }
     PrefsObject.setToken(response.data!.token);
     LoginScreen.user = response.data!.user;
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Vítejte zpět!",
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Color.fromRGBO(30, 30, 30, 0.7),
+    ));
     Navigator.pushNamed(context, HomeScreen.routeName);
   }
 }

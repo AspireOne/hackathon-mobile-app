@@ -3,6 +3,7 @@ import 'package:hackathon_app/screens/HomeScreen.dart';
 import 'package:hackathon_app/screens/LoginScreen.dart';
 import 'package:hackathon_app/screens/MenuScreen.dart';
 import 'package:hackathon_app/screens/SettingsScreen.dart';
+import 'package:hackathon_app/screens/product_info_screen.dart';
 
 import 'objects/constants.dart';
 
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         LoginScreen.routeName: (context) => LoginScreen(title: name),
         MenuScreen.routeName: (context) => const MenuScreen(),
         SettingsScreen.routeName: (context) => const SettingsScreen(),
+        ProductInfoScreen.routeName: (context) => const ProductInfoScreen(),
       },
       //title: 'Baťa Warehouse Manager'
     );

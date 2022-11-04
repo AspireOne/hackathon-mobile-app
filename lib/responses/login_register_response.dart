@@ -1,14 +1,13 @@
 import 'package:hackathon_app/objects/SharedPrefs.dart';
+import 'package:hackathon_app/responses/action_response.dart';
 
 import '../objects/user.dart';
 
-class LoginRegisterResponse {
-  final Map<String, dynamic> originalJson;
-  final String message;
-  final int statusCode;
+class LoginRegisterResponse extends ActionResponse {
   final Data? data;
 
-  LoginRegisterResponse({required this.message, required this.statusCode, required this.originalJson, this.data});
+  LoginRegisterResponse({required String message, required int statusCode, required Map<String, dynamic> originalJson, this.data})
+      : super(message: message, statusCode: statusCode, originalJson: originalJson);
 
   static Future<LoginRegisterResponse> fromJson(Map<String, dynamic> json) async {
     return LoginRegisterResponse(
