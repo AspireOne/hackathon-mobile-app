@@ -1,4 +1,4 @@
-import 'package:hackathon_app/objects/SharedPrefs.dart';
+import 'package:hackathon_app/objects/shared_prefs.dart';
 import 'package:hackathon_app/responses/action_response.dart';
 
 import '../objects/user.dart';

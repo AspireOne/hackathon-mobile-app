@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hackathon_app/objects/SharedPrefs.dart';
+import 'package:hackathon_app/objects/shared_prefs.dart';
 import 'package:hackathon_app/objects/api.dart';
 import 'package:hackathon_app/responses/get_product_response.dart';
-import 'package:hackathon_app/screens/HomeScreen.dart';
+import 'package:hackathon_app/screens/home_screen.dart';
 import 'package:selectable_container/selectable_container.dart';
 
 import '../responses/change_variant_count_response.dart';

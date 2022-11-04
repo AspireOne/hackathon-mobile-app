@@ -6,7 +6,7 @@ import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import '../objects/user.dart';
-import 'LoginScreen.dart';
+import 'login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = 'homeScreen';

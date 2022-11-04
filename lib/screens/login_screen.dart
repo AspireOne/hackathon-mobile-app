@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hackathon_app/responses/login_register_response.dart';
 
-import '../objects/SharedPrefs.dart';
+import '../objects/shared_prefs.dart';
 import '../objects/api.dart';
 import '../objects/user.dart';
-import 'HomeScreen.dart';
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = 'loginScreen';

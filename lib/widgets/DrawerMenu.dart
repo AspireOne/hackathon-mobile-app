@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hackathon_app/objects/SharedPrefs.dart';
-import 'package:hackathon_app/objects/constantStorageKeys.dart';
+import 'package:hackathon_app/objects/shared_prefs.dart';
+import 'package:hackathon_app/objects/constant_storage_keys.dart';
 import 'package:hackathon_app/objects/user.dart';
-import 'package:hackathon_app/screens/HomeScreen.dart';
-import 'package:hackathon_app/screens/LoginScreen.dart';
-import 'package:hackathon_app/screens/SettingsScreen.dart';
+import 'package:hackathon_app/screens/home_screen.dart';
+import 'package:hackathon_app/screens/login_screen.dart';
+import 'package:hackathon_app/screens/settings_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../objects/constants.dart';
