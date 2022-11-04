@@ -186,11 +186,11 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
           inputFormatters: [
             NumericalRangeFormatter(min: 0, max: max)
           ],
+          keyboardType: TextInputType.number,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             labelText: 'ks',
           ),
-          keyboardType: TextInputType.number,
           onChanged: (value) {
             onChanged(int.parse(value));
           }

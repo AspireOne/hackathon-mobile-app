@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:hackathon_app/objects/product.dart';
 import 'package:hackathon_app/objects/user.dart';
+import 'package:hackathon_app/responses/create_product_response.dart';
 import 'package:hackathon_app/responses/login_register_response.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,6 +15,7 @@ class Api {
   static const String tokenLoginUrl = "$url/employee/@me";
   static const String registerUrl = "$url/employee/register";
   static const String getProductUrl = "$url/product/fetch/";
+  static const String createProductUrl = "$url/product/create";
   static const String changeProductCountUrl = "$url/product/changeVariantCount";
 
   static Future<LoginRegisterResponse> register(String email, String password, String name, String surname) async {
@@ -29,6 +32,22 @@ class Api {
       }),
     );
     return LoginRegisterResponse.fromJson(jsonDecode(response.body));
+  }
+
+  static Future<CreateProductResponse> createProduct(Product product, String token) async {
+    print("PRODUCT AS JSON AAAAAAAAAAAAAAAA: ");
+    print(jsonEncode(product.toJson()));
+
+    var response = await http.post(
+      Uri.parse(createProductUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': token,
+      },
+      body: jsonEncode(product.toJson()),
+    );
+
+    return CreateProductResponse.fromJson(jsonDecode(response.body));
   }
 
   static Future<ChangeVariantCountResponse> changeProductVariantCount(String id, String token, int newCount) async {

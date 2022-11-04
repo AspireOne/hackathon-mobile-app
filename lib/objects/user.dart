@@ -4,13 +4,15 @@ class User {
   String? name;
   String? surname;
   String? email;
+  String? avatarUrl;
 
-  User({this.name, this.surname, this.email});
+  User({this.name, this.surname, this.email, this.avatarUrl});
 
   User.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     surname = json['surname'];
     email = json['email'];
+    avatarUrl = json['avatar'];
   }
 
   // Returns the name + surname, or if one of them is null, returns the other one.

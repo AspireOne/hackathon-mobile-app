@@ -43,6 +43,9 @@ dependencies:
   flutter_barcode_scanner: ^2.0.0
   selectable_container: ^1.0.7
   numberpicker: ^2.1.1
+  flutter_svg: ^1.1.6
+  vibration: ^1.7.6
+  scrollable_panel: ^0.4.1
 
 dev_dependencies:
   flutter_test:

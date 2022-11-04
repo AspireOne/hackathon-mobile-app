@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hackathon_app/screens/add_product_screen.dart';
 import 'package:hackathon_app/screens/home_screen.dart';
 import 'package:hackathon_app/screens/login_screen.dart';
 import 'package:hackathon_app/screens/menu_screen.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         MenuScreen.routeName: (context) => const MenuScreen(),
         SettingsScreen.routeName: (context) => const SettingsScreen(),
         ProductInfoScreen.routeName: (context) => const ProductInfoScreen(),
+        AddProductScreen.routeName: (context) => const AddProductScreen(),
       },
       //title: 'Baťa Warehouse Manager'
     );
