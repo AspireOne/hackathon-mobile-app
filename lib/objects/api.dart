@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 class Api {
   static const String url = "https://hackathon-backend.up.railway.app/api";
   static const String loginUrl = "$url/employee/login";
+  static const String tokenLoginUrl = "$url/employee/@me";
   static const String registerUrl = "$url/employee/register";
 
   static Future<LoginRegisterResponse> register(String email, String password, String name, String surname) async {
@@ -22,6 +23,20 @@ class Api {
         'surname': surname,
       }),
     );
+    return LoginRegisterResponse.fromJson(jsonDecode(response.body));
+  }
+
+  static Future<LoginRegisterResponse> loginWithToken(String token) async {
+    var response = await http.get(
+      Uri.parse(tokenLoginUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "authorization": "$token"
+      },
+    );
+
+    print(response.body);
+    jsonDecode(response.body);
     return LoginRegisterResponse.fromJson(jsonDecode(response.body));
   }
 

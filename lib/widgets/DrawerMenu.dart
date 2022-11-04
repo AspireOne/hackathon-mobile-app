@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hackathon_app/objects/SharedPrefs.dart';
 import 'package:hackathon_app/objects/constantStorageKeys.dart';
 import 'package:hackathon_app/objects/user.dart';
 import 'package:hackathon_app/screens/HomeScreen.dart';
@@ -19,15 +20,29 @@ class DrawerMenu extends StatefulWidget {
 
 class _DrawerMenuState extends State<DrawerMenu> {
   Widget _buildAvatar(String? inicials) {
+    Widget avatar;
+
     if (inicials == null) {
-      return const CircleAvatar(
+      avatar = const Icon(
+        Icons.person,
+        size: 50.0,
+        color: Constants.primaryColor,
+      );
+    } else {
+      avatar = Text(
+        inicials,
+        style: const TextStyle(
+          fontSize: 50.0,
+          color: Constants.primaryColor,
+        ),
+      );
+    }
+
+    if (inicials == null) {
+      return CircleAvatar(
           backgroundColor: Colors.white,
           radius: 40.0,
-          child: Icon(
-            Icons.person,
-            size: 50.0,
-            color: Constants.primaryColor,
-          )
+          child: avatar
       );
     }
     return Text(
@@ -93,13 +108,8 @@ class _DrawerMenuState extends State<DrawerMenu> {
           ListTile(
             title: const Text('Odhlásit'),
             onTap: () async {
-              SharedPreferences.getInstance()
-                  .then((prefs) => prefs.remove(ConstantStorageKeys.token))
-                  .then((success) => {
-                    if (success) {
-                      Navigator.pushNamedAndRemoveUntil(context, LoginScreen.routeName, (route) => false)
-                    }
-                  });
+              PrefsObject.setToken(null);
+              Navigator.pushNamedAndRemoveUntil(context, LoginScreen.routeName, (route) => false);
             },
           ),
         ],

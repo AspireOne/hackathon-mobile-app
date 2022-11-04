@@ -29,6 +29,19 @@ class _LoginScreenState extends State<LoginScreen> {
   String? surname;
 
   @override
+  void initState() {
+    PrefsObject.getToken().then((token) {
+      print("TOKENAAAAAAAAAAA: $token");
+      if (token == null) return null;
+      Api.loginWithToken(token).then((response) {
+        handleLoginOrRegisterRequestResponse(response);
+      });
+    });
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -81,7 +94,12 @@ class _LoginScreenState extends State<LoginScreen> {
           style: ButtonStyle(
             foregroundColor: MaterialStateProperty.all<Color>(register ? Colors.black : Colors.red),
           ),
-          child: const Text("Přihlásení"),
+          child: const Text(
+            "Přihlásení",
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
         ),
         // Add vertical divider.
         TextButton(
@@ -94,7 +112,12 @@ class _LoginScreenState extends State<LoginScreen> {
           style: ButtonStyle(
             foregroundColor: MaterialStateProperty.all<Color>(register ? Colors.red : Colors.black),
           ),
-          child: const Text("Registrace"),
+          child: const Text(
+            "Registrace",
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
         ),
       ],
     );

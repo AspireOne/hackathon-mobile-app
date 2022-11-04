@@ -1,3 +1,5 @@
+import 'package:hackathon_app/objects/SharedPrefs.dart';
+
 import '../objects/user.dart';
 
 class LoginRegisterResponse {
@@ -8,12 +10,12 @@ class LoginRegisterResponse {
 
   LoginRegisterResponse({required this.message, required this.statusCode, required this.originalJson, this.data});
 
-  static LoginRegisterResponse fromJson(Map<String, dynamic> json) {
+  static Future<LoginRegisterResponse> fromJson(Map<String, dynamic> json) async {
     return LoginRegisterResponse(
       originalJson: json,
       message: json['message'],
       statusCode: json['statusCode'],
-      data: json['data'] == Null || json['data'] == null ? null : Data.fromJson(json['data']),
+      data: json['data'] == Null || json['data'] == null ? null : await Data.fromJson(json['data']),
     );
   }
 }
@@ -24,9 +26,9 @@ class Data {
 
   Data({required this.token, required this.user});
 
-  static Data fromJson(Map<String, dynamic> json) {
+  static Future<Data> fromJson(Map<String, dynamic> json) async {
     return Data(
-      token: json['token'],
+      token: json['token'] ?? await PrefsObject.getToken(),
       user: User.fromJson(json['employee']),
     );
   }
