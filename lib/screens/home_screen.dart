@@ -22,7 +22,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Card>? recentProducts;
+  List<Widget>? recentProducts;
   bool loading = false;
 
   void _scanShoes() async {
@@ -119,33 +119,57 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void initRecentProducts() async {
     recentProducts = [];
-    recentProducts = await _buildProductHistoryList();
-    setState(() {});
+    _buildProductHistoryList((products) {
+      recentProducts = products;
+      recentProducts!.sort((a, b) => b.toString().compareTo(a.key.toString()));
+      setState(() {});
+    });
   }
 
-  Future<List<Card>> _buildProductHistoryList() async {
+  Widget _createDismissableCard(String id, String name, String description) {
+    return Dismissible(
+      key: Key(id),
+      onDismissed: (direction) {
+        PrefsObject.removeRecentProduct(id);
+        //initRecentProducts();
+      },
+      child: Card(
+        child: ListTile(
+          title: Text(name),
+          subtitle: Text(description),
+          onTap: () {
+            Navigator.pushNamed(context, ProductInfoScreen.routeName, arguments: id);
+          },
+        ),
+      ),
+    );
+  }
+
+  void _buildProductHistoryList(Function(List<Widget>) callback) async {
     setState(() => loading = true);
+
     var recents = await PrefsObject.getRecentProducts();
-    List<Card> cards = [];
+    List<Widget> cards = [];
+    List<int> loadedIndexes = [];
     for (int i = 0; i < recents.length; i++) {
       Api.getProduct(recents[i]).then((response) {
-        if (response.statusCode != 200) return;
+        if (response.statusCode != 200) {
+          print("Error: ${response.statusCode}");
+          return;
+        }
         cards.add(
-            Card(
-              child: ListTile(
-                title: Text(response.data!.name),
-                subtitle: Text(response.data!.description),
-                onTap: () {
-                  Navigator.pushNamed(context, ProductInfoScreen.routeName, arguments: recents[i]);
-                },
-              ),
+            _createDismissableCard(
+                recents[i],
+                response.data!.name,
+                response.data!.description
             )
         );
-        if (i == recents.length - 1) {
+        loadedIndexes.add(i);
+        if (loadedIndexes.length == recents.length) {
           setState(() => loading = false);
+          callback(cards);
         }
       });
     }
-    return cards;
   }
 }

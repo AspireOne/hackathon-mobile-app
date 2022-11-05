@@ -26,4 +26,11 @@ class PrefsObject {
     var prefs = await SharedPreferences.getInstance();
     await prefs.setStringList("recentProducts", recentProducts);
   }
+
+  static void removeRecentProduct(String id) async {
+    var recentProducts = await getRecentProducts();
+    recentProducts.remove(id);
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList("recentProducts", recentProducts);
+  }
 }

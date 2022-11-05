@@ -263,7 +263,7 @@ class _LoginScreenState extends State<LoginScreen> {
             "Vítejte zpět!",
             textAlign: TextAlign.center,
           ),
-          backgroundColor: Color.fromRGBO(30, 30, 30, 0.7),
+          backgroundColor: Color.fromRGBO(255, 108, 108, 0.7019607843137254),
     ));
     Navigator.pushNamed(context, HomeScreen.routeName);
   }
