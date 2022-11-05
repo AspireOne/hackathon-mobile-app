@@ -39,7 +39,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
     }
 
     return CircleAvatar(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.redAccent,
         radius: 40.0,
         child: avatar
     );
@@ -77,7 +77,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
           // Create a drawer header with account information and background image.
           DrawerHeader(
             decoration: const BoxDecoration(
-              color: Color.fromRGBO(60, 60, 60, 1),
+              color: Colors.deepPurple,
             ),
             child: Column(
               children: <Widget>[

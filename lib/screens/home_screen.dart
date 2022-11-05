@@ -67,18 +67,21 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: DrawerMenu(user: LoginScreen.user),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                "Naposledy přidané",
-                // Make text bigger.
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  "Naposledy přidané",
+                  // Make text bigger.
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            body
-          ],
+              body,
+              const SizedBox(height: 100)
+            ],
+          ),
         ),
       ),
       floatingActionButton: Row(

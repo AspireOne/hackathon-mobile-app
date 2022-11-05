@@ -60,12 +60,14 @@ class _LoginScreenState extends State<LoginScreen> {
         title: Text(widget.title ?? "Baťův skladový pomocník"),
       ),
       // Create a login page.
-      body: Container(
-          decoration: _buildGradientDecoration(),
-          child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: _buildContent()
-          )
+      body: SingleChildScrollView(
+        child: Container(
+            decoration: _buildGradientDecoration(),
+            child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: _buildContent()
+            )
+        ),
       ),
     );
   }

@@ -93,6 +93,8 @@ class Api {
       body: jsonEncode(product.toJson()),
     );
 
+    print("CREATING PRODUCT WWWWWWWWWWWWWWWWWWWWWW:");
+    print(jsonEncode(product.toJson()));
     return CreateProductResponse.fromJson(jsonDecode(response.body));
   }
 
