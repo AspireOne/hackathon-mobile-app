@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hackathon_app/objects/shared_prefs.dart';
+import 'package:hackathon_app/objects/prefs_object.dart';
 import 'package:hackathon_app/objects/api.dart';
 import 'package:hackathon_app/responses/get_product_response.dart';
 import 'package:hackathon_app/screens/home_screen.dart';

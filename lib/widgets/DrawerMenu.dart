@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hackathon_app/objects/shared_prefs.dart';
+import 'package:hackathon_app/objects/prefs_object.dart';
 import 'package:hackathon_app/objects/constant_storage_keys.dart';
 import 'package:hackathon_app/objects/user.dart';
 import 'package:hackathon_app/screens/home_screen.dart';
@@ -70,7 +70,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
   Widget build(BuildContext context) {
     // return a Drawer widget.
     return Drawer(
-      backgroundColor: Color.fromRGBO(240, 240, 240, 1),
+      backgroundColor: const Color.fromRGBO(240, 240, 240, 1),
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
@@ -94,12 +94,12 @@ class _DrawerMenuState extends State<DrawerMenu> {
               Navigator.pushNamed(context, HomeScreen.routeName);
             },
           ),
-          ListTile(
+/*          ListTile(
             title: const Text('Nastavení'),
             onTap: () {
               Navigator.pushNamed(context, SettingsScreen.routeName);
             },
-          ),
+          ),*/
           ListTile(
             title: const Text('Odhlásit'),
             onTap: () async {

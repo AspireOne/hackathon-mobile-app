@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hackathon_app/objects/api.dart';
 import 'package:hackathon_app/objects/product.dart';
-import 'package:hackathon_app/objects/shared_prefs.dart';
+import 'package:hackathon_app/objects/prefs_object.dart';
 
 import '../objects/ProductVariant.dart';
 import '../responses/fetch_building_response.dart';
@@ -116,15 +116,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
     );
 
     Api.createProduct(product, (await PrefsObject.getToken())!)
-    .then((response) async => {
-      if (response.statusCode == 200) {
+    .then((createProductResponse) async => {
+      if (createProductResponse.statusCode == 200) {
         print("GGGGGGGG ${productFieldsState.selectedFloor!.content.id}"),
         Api.addProductToWarehouse(
-            response.data!.product.id,
+            createProductResponse.data!.product.id,
             productFieldsState.selectedFloor!.content.id,
             (await PrefsObject.getToken())!)
             .then((response) {
               if (response.statusCode == 200) {
+                PrefsObject.addRecentProduct(createProductResponse.data!.product.id);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text("Boty byly úspěšně přidány."),
@@ -143,7 +144,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Něco se pokazilo při ukládání bot. Chyba: ${response.message}"),
+            content: Text("Něco se pokazilo při ukládání bot. Chyba: ${createProductResponse.message}"),
           ),
         )
       }

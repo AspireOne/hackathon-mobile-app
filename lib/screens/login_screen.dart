@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hackathon_app/responses/login_register_response.dart';
 
-import '../objects/shared_prefs.dart';
+import '../objects/prefs_object.dart';
 import '../objects/api.dart';
 import '../objects/user.dart';
 import 'home_screen.dart';
@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(widget.title ?? "Baťa Warehouse Manager"),
+        title: Text(widget.title ?? "Baťův skladový pomocník"),
       ),
       // Create a login page.
       body: Container(

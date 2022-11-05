@@ -13,7 +13,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final String name = "Baťa Warehouse Manager";
+  final String name = "Baťův skladový pomocník";
   const MyApp({super.key});
 
   // This widget is the root of your application.
