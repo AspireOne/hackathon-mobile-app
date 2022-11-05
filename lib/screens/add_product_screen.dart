@@ -7,6 +7,8 @@ import 'package:hackathon_app/objects/product.dart';
 import 'package:hackathon_app/objects/shared_prefs.dart';
 
 import '../objects/ProductVariant.dart';
+import '../responses/fetch_building_response.dart';
+import '../responses/fetch_buildings_response.dart';
 
 class AddProductScreen extends StatefulWidget {
   static const String routeName = 'addProductScreen';
@@ -17,16 +19,21 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
-  // TODO: Just put it in Product.variants.
   VariantFieldsState variantFieldsState = VariantFieldsState();
   ProductFieldsState productFieldsState = ProductFieldsState();
   var variantNameController = TextEditingController();
   var variantPriceController = TextEditingController();
   var variantCountController = TextEditingController();
+  List<Building>? buildings;
+  List<Floor>? currentlyAvailableFloors;
   List<ProductVariant> variants = [];
 
   @override
   Widget build(BuildContext context) {
+    if (buildings == null) {
+      _fetchBuildings();
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Přidat boty"),
@@ -49,6 +56,25 @@ class _AddProductScreenState extends State<AddProductScreen> {
         ),
       ),
     );
+  }
+
+  void _fetchBuildings() {
+    buildings = [];
+    Api.getBuildings().then((response) {
+      if (response.statusCode == 200) {
+        setState(() {
+          buildings = response.data!.buildings;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text("Nastala chyba při získávání skladů. Chyba:" + response.message)
+          ),
+        );
+        Navigator.pop(context);
+        return;
+      }
+    });
   }
 
   Widget _buildSubmitButton() {
@@ -217,7 +243,40 @@ class _AddProductScreenState extends State<AddProductScreen> {
           _buildTextField("Název", (text) => productFieldsState.name = text),
           const SizedBox(height: 10),
           _buildTextField("Popis", (text) => productFieldsState.description = text),
+          const SizedBox(height: 10),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildBuildingsDropdown(),
+              const SizedBox(width: 30),
+              FloorsDropdown(floors: currentlyAvailableFloors, onFloorSelected: (floor) {
+                setState(() {
+                  productFieldsState.selectedFloor = floor;
+                });
+              }),
+            ]
+          )
         ]
+    );
+  }
+
+  Widget _buildBuildingsDropdown() {
+    return BuildingsDropdown(
+      buildings: buildings!,
+      onBuildingSelected: (building) async {
+        setState(() {
+          productFieldsState.selectedBuilding = building;
+          productFieldsState.selectedFloor = null;
+          currentlyAvailableFloors = null;
+        });
+        Api.getBuilding(building.id, (await PrefsObject.getToken())!).then((response) {
+          setState(() {
+            currentlyAvailableFloors = response.data!.building.floors.where((floor) {
+              return floor.type == "Warehouse";
+            }).toList();
+          });
+        });
+      },
     );
   }
 
@@ -267,8 +326,85 @@ class VariantFieldsState {
 class ProductFieldsState {
   String? name;
   String? description;
+  Building? selectedBuilding;
+  Floor? selectedFloor;
 
   bool isAnyNull() {
-    return name == null || description == null;
+    return name == null || description == null || selectedBuilding == null || selectedFloor == null;
+  }
+}
+
+class BuildingsDropdown extends StatefulWidget {
+  final List<Building> buildings;
+  final Function(Building) onBuildingSelected;
+
+  const BuildingsDropdown({Key? key, required this.buildings, required this.onBuildingSelected}) : super(key: key);
+
+  @override
+  State<BuildingsDropdown> createState() => _BuildingsDropdownState();
+}
+
+class _BuildingsDropdownState extends State<BuildingsDropdown> {
+  String? selectedValue;
+
+  List<DropdownMenuItem<String>> get dropdownItems{
+    List<DropdownMenuItem<String>> menuItems = [];
+    for (Building building in widget.buildings) {
+      menuItems.add(DropdownMenuItem(value: building.id, child: Text(building.name)));
+    }
+    return menuItems;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton(
+      hint: const Text("Sklad"),
+      value: selectedValue,
+      items: dropdownItems,
+      onChanged: (String? value) {
+        selectedValue = value!;
+        Building building = widget.buildings.firstWhere((build) => build.id == value);
+        widget.onBuildingSelected(building);
+      },
+    );
+  }
+}
+
+
+
+
+class FloorsDropdown extends StatefulWidget {
+  final List<Floor>? floors;
+  final Function(Floor) onFloorSelected;
+
+  const FloorsDropdown({Key? key, this.floors, required this.onFloorSelected}) : super(key: key);
+
+  @override
+  State<FloorsDropdown> createState() => _FloorsDropdownState();
+}
+
+class _FloorsDropdownState extends State<FloorsDropdown> {
+  String? selectedFloorId;
+
+  List<DropdownMenuItem<String>> get dropdownItems{
+    List<DropdownMenuItem<String>> menuItems = [];
+    for (Floor floor in widget.floors ?? []) {
+      menuItems.add(DropdownMenuItem(value: floor.id, child: Text(floor.content!.name)));
+    }
+    return menuItems;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton(
+      hint: const Text("Patro"),
+      value: selectedFloorId,
+      items: dropdownItems,
+      onChanged: (String? value) {
+        selectedFloorId = value!;
+        Floor floor = widget.floors!.firstWhere((f) => f.id == value);
+        widget.onFloorSelected(floor);
+      },
+    );
   }
 }

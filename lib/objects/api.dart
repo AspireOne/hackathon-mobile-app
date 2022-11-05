@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:hackathon_app/objects/product.dart';
 import 'package:hackathon_app/objects/user.dart';
 import 'package:hackathon_app/responses/create_product_response.dart';
+import 'package:hackathon_app/responses/fetch_buildings_response.dart';
 import 'package:hackathon_app/responses/login_register_response.dart';
 import 'package:http/http.dart' as http;
 
 import '../responses/change_variant_count_response.dart';
+import '../responses/fetch_building_response.dart';
 import '../responses/get_product_response.dart';
 
 class Api {
@@ -17,6 +19,8 @@ class Api {
   static const String getProductUrl = "$url/product/fetch/";
   static const String createProductUrl = "$url/product/create";
   static const String changeProductCountUrl = "$url/product/changeVariantCount";
+  static const String getBuildingsUrl = "$url/building/fetch";
+  static const String getBuildingUrl = "$url/building/fetch/";
 
   static Future<LoginRegisterResponse> register(String email, String password, String name, String surname) async {
     var response = await http.post(
@@ -34,10 +38,34 @@ class Api {
     return LoginRegisterResponse.fromJson(jsonDecode(response.body));
   }
 
-  static Future<CreateProductResponse> createProduct(Product product, String token) async {
-    print("PRODUCT AS JSON AAAAAAAAAAAAAAAA: ");
-    print(jsonEncode(product.toJson()));
+  static Future<FetchBuldingsResponse> getBuildings() async {
+    var response = await http.get(
+      Uri.parse(getBuildingsUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
 
+    print("BUILDINGS RESPONSE AS JSON AAAAAAAA: ");
+    print(jsonDecode(response.body));
+    return FetchBuldingsResponse.fromJson(jsonDecode(response.body));
+  }
+
+  static Future<FetchBuildingResponse> getBuilding(String buildingId, String token) async {
+    var response = await http.get(
+      Uri.parse(getBuildingUrl + buildingId),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": token
+      },
+    );
+
+    print("BUILDINGS RESPONSE AS JSON AAAAAAAA: ");
+    print(jsonDecode(response.body));
+    return FetchBuildingResponse.fromJson(jsonDecode(response.body));
+  }
+
+  static Future<CreateProductResponse> createProduct(Product product, String token) async {
     var response = await http.post(
       Uri.parse(createProductUrl),
       headers: <String, String>{
