@@ -116,20 +116,36 @@ class _AddProductScreenState extends State<AddProductScreen> {
     );
 
     Api.createProduct(product, (await PrefsObject.getToken())!)
-    .then((response) => {
+    .then((response) async => {
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Boty byly úspěšně přidány."),
-          ),
-        ),
-        Navigator.pop(context),
+        print("GGGGGGGG ${productFieldsState.selectedFloor!.content.id}"),
+        Api.addProductToWarehouse(
+            response.data!.product.id,
+            productFieldsState.selectedFloor!.content.id,
+            (await PrefsObject.getToken())!)
+            .then((response) {
+              if (response.statusCode == 200) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Boty byly úspěšně přidány."),
+                  ),
+                );
+                Navigator.pop(context);
+                return;
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Něco se pokazilo při ukládání do skladu. Chyba: ${response.message}"),
+                  ),
+                );
+              }
+            })
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Něco se pokazilo. Chyba: ${response.message}"),
+            content: Text("Něco se pokazilo při ukládání bot. Chyba: ${response.message}"),
           ),
-        ),
+        )
       }
     });
   }

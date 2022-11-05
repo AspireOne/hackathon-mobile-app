@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:hackathon_app/objects/product.dart';
 import 'package:hackathon_app/objects/user.dart';
+import 'package:hackathon_app/responses/add_product_to_warehouse_response.dart';
 import 'package:hackathon_app/responses/create_product_response.dart';
 import 'package:hackathon_app/responses/fetch_buildings_response.dart';
 import 'package:hackathon_app/responses/login_register_response.dart';
@@ -21,6 +22,7 @@ class Api {
   static const String changeProductCountUrl = "$url/product/changeVariantCount";
   static const String getBuildingsUrl = "$url/building/fetch";
   static const String getBuildingUrl = "$url/building/fetch/";
+  static const String addProductToWarehouseUrl = "$url/warehouse/addProduct";
 
   static Future<LoginRegisterResponse> register(String email, String password, String name, String surname) async {
     var response = await http.post(
@@ -36,6 +38,22 @@ class Api {
       }),
     );
     return LoginRegisterResponse.fromJson(jsonDecode(response.body));
+  }
+
+  static Future<AddProductToWarehouseResponse> addProductToWarehouse(String productId, String warehouseId, String token) async {
+    var response = await http.post(
+      Uri.parse(addProductToWarehouseUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': token,
+      },
+      body: jsonEncode(<String, String>{
+        'productId': productId,
+        'warehouseId': warehouseId,
+      }),
+    );
+
+    return AddProductToWarehouseResponse.fromJson(jsonDecode(response.body));
   }
 
   static Future<FetchBuldingsResponse> getBuildings() async {
