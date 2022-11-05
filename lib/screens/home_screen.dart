@@ -149,9 +149,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _buildProductHistoryList(Function(List<Widget>) callback) async {
-    setState(() => loading = true);
-
     var recents = await PrefsObject.getRecentProducts();
+    if (recents.isEmpty) {
+      callback([]);
+      return;
+    }
+    setState(() => loading = true);
     List<Widget> cards = [];
     List<int> loadedIndexes = [];
     for (int i = 0; i < recents.length; i++) {
