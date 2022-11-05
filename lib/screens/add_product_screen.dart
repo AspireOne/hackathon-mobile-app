@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:hackathon_app/objects/api.dart';
 import 'package:hackathon_app/objects/product.dart';
 import 'package:hackathon_app/objects/prefs_object.dart';
+import 'package:hackathon_app/screens/home_screen.dart';
 
 import '../objects/ProductVariant.dart';
 import '../responses/fetch_building_response.dart';
@@ -19,6 +20,7 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
+  bool loading = false;
   VariantFieldsState variantFieldsState = VariantFieldsState();
   ProductFieldsState productFieldsState = ProductFieldsState();
   var variantNameController = TextEditingController();
@@ -36,7 +38,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Přidat boty"),
+        title: const Text("Zaevidovat boty"),
       ),
       // Create a form with a text field for the product name and description.
       body: SingleChildScrollView(
@@ -81,7 +83,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     return SizedBox(
       width: 120,
       height: 50,
-      child: ElevatedButton(
+      child: loading ? const Center(child: CircularProgressIndicator()) : ElevatedButton(
         onPressed: () {
           _submitProduct();
         },
@@ -115,6 +117,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
       variants: variants,
     );
 
+    setState(() => loading = true);
+
     Api.createProduct(product, (await PrefsObject.getToken())!)
     .then((createProductResponse) async => {
       if (createProductResponse.statusCode == 200) {
@@ -131,9 +135,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     content: Text("Boty byly úspěšně přidány."),
                   ),
                 );
-                Navigator.pop(context);
+                Navigator.pushNamed(context, HomeScreen.routeName);
                 return;
               } else {
+                setState(() => loading = false);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text("Něco se pokazilo při ukládání do skladu. Chyba: ${response.message}"),
@@ -142,6 +147,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               }
             })
       } else {
+        setState(() => loading = false),
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Něco se pokazilo při ukládání bot. Chyba: ${createProductResponse.message}"),
